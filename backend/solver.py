@@ -1,6 +1,8 @@
 import os
 import re
 import json
+import io
+from PIL import Image
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
@@ -9,6 +11,7 @@ load_dotenv()
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
+MODELS = [m.strip() for m in os.getenv("GEMINI_MODELS", MODEL).split(",") if m.strip()]
 
 LANGS = {
     "hinglish": "simple Hinglish (Hindi + English mix, Roman script me)",
@@ -105,23 +108,50 @@ def _loads(text):
     raise ValueError("AI ka jawab samajh nahi aaya, dobara try karein")
 
 
-def _generate(contents, budget, max_tokens):
-    cfg = dict(response_mime_type="application/json", max_output_tokens=max_tokens)
+def _is_retryable(e):
+    s = str(e)
+    return "429" in s or "RESOURCE_EXHAUSTED" in s or "404" in s or "NOT_FOUND" in s
+
+
+def _call_model(model, contents, cfg, budget):
     try:
         return client.models.generate_content(
-            model=MODEL,
+            model=model,
             contents=contents,
             config=types.GenerateContentConfig(
                 thinking_config=types.ThinkingConfig(thinking_budget=budget), **cfg
             ),
         )
-    except Exception:
+    except Exception as e:
+        if _is_retryable(e):
+            raise
         return client.models.generate_content(
-            model=MODEL,
+            model=model,
             contents=contents,
             config=types.GenerateContentConfig(**cfg),
         )
 
+
+def _generate(contents, budget, max_tokens):
+    cfg = dict(response_mime_type="application/json", max_output_tokens=max_tokens)
+    last = None
+    for model in MODELS:
+        try:
+            return _call_model(model, contents, cfg, budget)
+        except Exception as e:
+            last = e
+            if _is_retryable(e):
+                continue
+            raise
+    raise last
+
+def _is_low_quality(image_bytes):
+    """Chhoti ya kam-resolution photo me galat padhna aasaan hai."""
+    try:
+        w, h = Image.open(io.BytesIO(image_bytes)).size
+        return min(w, h) < 600 or w * h < 500_000
+    except Exception:
+        return False
 
 def _num(n):
     m = re.search(r"\d+", str(n or ""))
@@ -180,6 +210,15 @@ def segment_questions(image_bytes: bytes, mime_type: str) -> dict:
         })
 
     warnings = []
+
+    if _is_low_quality(image_bytes):
+        warnings.append(
+            "Photo chhoti ya dhundhli hai, isliye har question ko apni aankh se ek baar check karein. Galat padhna aasaan hai."
+        )
+        for q in questions:
+            q["confidence"] = min(q["confidence"], 0.8)
+            q["issues"] = q["issues"] + ["Photo ki quality kam hai, text jaanch lein"]
+            q["needs_confirmation"] = True
 
     nums = sorted({n for n in (_num(q["number"]) for q in questions) if n is not None})
     if nums:
