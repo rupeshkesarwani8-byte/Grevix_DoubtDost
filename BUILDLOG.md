@@ -53,3 +53,8 @@
 ## 12:30 PM - Gemini free quota khatam
 - Problem: testing me gemini-2.5-flash ki roz ki 20 requests khatam ho gayi (429 error)
 - Maine kya decide kiya: model fallback list lagayi (flash se flash-lite), taaki ek model band ho to app chalta rahe
+
+
+## 1:00 PM - Test 4: diagram wala question
+- Test: logic circuit ke figure wala question upload kiya
+- Result: "Diagram wala" tag aaya aur app ne bina diagram ki jaankari ke steps nahi banaye
