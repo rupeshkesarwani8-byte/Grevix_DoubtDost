@@ -13,6 +13,16 @@ app.add_middleware(
 )
 
 
+def _fail(e):
+    msg = str(e)
+    if "429" in msg or "RESOURCE_EXHAUSTED" in msg:
+        return HTTPException(
+            status_code=429,
+            detail="Aaj ki free AI limit khatam ho gayi hai. Kuch der baad ya kal dobara try karein.",
+        )
+    return HTTPException(status_code=500, detail=msg)
+
+
 @app.get("/")
 def health():
     return {"status": "ok"}
@@ -26,7 +36,7 @@ async def segment(image: UploadFile = File(...)):
     try:
         return segment_questions(data, image.content_type)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _fail(e)
 
 
 @app.post("/solve-question")
@@ -51,4 +61,4 @@ async def solve(
     try:
         return solve_question(question_text, mode, lang, image_bytes, mime)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise _fail(e)
