@@ -206,6 +206,11 @@ export default function App() {
         <span className="badge">AI Doubt Solver</span>
         <h1>DoubtDost</h1>
         <p className="sub">Pehle har question alag nikalta hu, aapke confirm karne par hi solve karta hu.</p>
+      <ol className="howto">
+      < li>Question ya paper ki photo daalein</li>
+      <li>"Questions padho" dabayein aur check karein</li>
+      <li>"Solve karo" dabayein</li>
+    </ol>
       </div>
 
       <div className="glass">
@@ -254,6 +259,7 @@ export default function App() {
           {segmenting && <span className="spinner" />}
           {segmenting ? "Questions padh raha hu..." : "Questions padho"}
         </button>
+        {segmenting && <p className="sub">Pehli baar 30-60 second lag sakte hain, kripya ruke.</p>}
         {error && <div className="error">{error}</div>}
       </div>
 
@@ -346,6 +352,7 @@ export default function App() {
                     ))}
                     {sol.final_answer && <div className="answer"><b>Answer:</b> {sol.final_answer}</div>}
                     {sol.verification && <div className="verify"><b>Jaanch:</b> {sol.verification}</div>}
+                    <p className="sub">AI se galti ho sakti hai. Apni copy ya book se ek baar milayein.</p>
                     {sol.mistake_hint && <div className="tip"><b>Dhyan rakho:</b> {sol.mistake_hint}</div>}
                     {sol.practice_questions?.length > 0 && (
                       <>

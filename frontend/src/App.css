@@ -101,3 +101,4 @@ h3 { margin: 18px 0 10px; font-size: 16px; }
 .btn-sm { width: auto; margin-top: 0; padding: 9px 16px; font-size: 14px; }
 .clarify { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.35); padding: 12px; border-radius: 12px; margin-top: 12px; }
 .verify { background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.35); padding: 12px 14px; border-radius: 12px; margin-top: 10px; }
+.howto { max-width: 420px; margin: 14px auto 0; text-align: left; color: var(--muted); font-size: 14px; }
