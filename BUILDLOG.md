@@ -58,3 +58,10 @@
 ## 1:00 PM - Test 4: diagram wala question
 - Test: logic circuit ke figure wala question upload kiya
 - Result: "Diagram wala" tag aaya aur app ne bina diagram ki jaankari ke steps nahi banaye
+
+## [time] - Challenge 2: Real-World Feedback
+- Card ka sawal: project asli logon ko dikhana, honest feedback lena aur ek feedback par badlav karna
+- Maine kya kiya: [kahan share kiya aur kitne logon ko]
+- Log kya bole: [feedback]
+- Maine kya decide kiya: [kaunsa feedback chuna aur kyun]
+- Maine kya reject kiya: [koi feedback jo maine nahi liya aur wajah. Na ho to ye line hata dein]

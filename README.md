@@ -57,4 +57,11 @@ Frontend:
 **Testing:** dense exam paper, haath se likha snippet (ek question jaanbujhkar kharab), 30% resize ki hui dhundhli photo, aur diagram wala question.
 
 ### Challenge 2
-(Card aane ke baad yahan likhenge)
+### Challenge 2: Real-World Feedback
+**Card:** project ko asli logon ke saamne rakhna, honest feedback lena, aur ek feedback par badlav karna.
+
+**Kahan share kiya:** [LinkedIn / Reddit / WhatsApp group]
+**Log kya bole:** [ek-do line]
+**Maine kya badla:** [ek-do line]
+
+Poora proof `feedback/` folder me hai (post ke aur feedback ke screenshots, aur note).
